@@ -10,14 +10,20 @@ import {
   CloudOutlined,
   SecurityScanOutlined,
   MobileOutlined,
-  CloseOutlined
+  CloseOutlined,
+  LoginOutlined,
+  LogoutOutlined
 } from '@ant-design/icons';
+// import { login, logout, store } from '../store';
 
 const { Header: AntHeader } = Layout;
 const { Title, Text } = Typography;
 
-const Header: React.FC = () => {
+
+const Header = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
+  // const { isAuthenticated, user } = useSelector(state => state);
+  // const dispatch = useDispatch();
 
   const showDrawer = () => {
     setDrawerVisible(true);
@@ -27,12 +33,38 @@ const Header: React.FC = () => {
     setDrawerVisible(false);
   };
 
-  const navItems = [
+  const handleLogin = () => {
+    // Simulate login
+    // dispatch(login({
+    //   name: 'John Doe',
+    //   email: 'john.doe@company.com',
+    //   avatar: null
+    // }));
+  };
+
+  const isAuthenticated = false; // Replace with actual auth state from Redux
+  const user = {email: "joh@gmail.com", name: "Johaness ben"}; // Replace with actual user data from Redux
+  const handleLogout = () => {
+    // dispatch(logout());
+    setDrawerVisible(false);
+  };
+
+  // Public navigation items (always visible)
+  const publicNavItems = [
     { key: 'features', label: 'Features', icon: <CloudOutlined /> },
     { key: 'security', label: 'Security', icon: <SecurityScanOutlined /> },
-    { key: 'mobile', label: 'Mobile App', icon: <MobileOutlined /> },
     { key: 'pricing', label: 'Pricing', icon: <FileTextOutlined /> },
   ];
+
+  // Authenticated navigation items (only visible when logged in)
+  const authenticatedNavItems = [
+    { key: 'mobile', label: 'Mobile App', icon: <MobileOutlined /> },
+  ];
+
+  // All navigation items based on auth status
+  const navItems = isAuthenticated 
+    ? [...publicNavItems, ...authenticatedNavItems]
+    : publicNavItems;
 
   return (
     <>
@@ -89,9 +121,6 @@ const Header: React.FC = () => {
             display: 'flex', 
             alignItems: 'center', 
             gap: 8,
-            '@media (max-width: 768px)': {
-              display: 'none'
-            }
           }}
           className="desktop-nav"
         >
@@ -130,81 +159,121 @@ const Header: React.FC = () => {
 
         {/* Right Side - Actions */}
         <Space size={8}>
-          {/* Search Button (Desktop) */}
-          <Button
-            type="text"
-            icon={<SearchOutlined />}
-            style={{
-              color: 'rgba(255, 255, 255, 0.9)',
-              border: 'none',
-              width: 44,
-              height: 44,
-              borderRadius: '6px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '16px',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-              e.currentTarget.style.color = 'white';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent';
-              e.currentTarget.style.color = 'rgba(255, 255, 255, 0.9)';
-            }}
-            className="desktop-only"
-          />
+          {/* Authenticated features */}
+          {isAuthenticated && (
+            <>
+              {/* Search Button (Desktop) */}
+              <Button
+                type="text"
+                icon={<SearchOutlined />}
+                style={{
+                  color: 'rgba(255, 255, 255, 0.9)',
+                  border: 'none',
+                  width: 44,
+                  height: 44,
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '16px',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                  e.currentTarget.style.color = 'white';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.9)';
+                }}
+                className="desktop-only"
+              />
 
-          {/* Notifications */}
-          <Badge count={3} size="small">
+              {/* Notifications */}
+              <Badge count={3} size="small">
+                <Button
+                  type="text"
+                  icon={<BellOutlined />}
+                  style={{
+                    color: 'rgba(255, 255, 255, 0.9)',
+                    border: 'none',
+                    width: 44,
+                    height: 44,
+                    borderRadius: '6px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '16px',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                    e.currentTarget.style.color = 'white';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.9)';
+                  }}
+                  className="desktop-only"
+                />
+              </Badge>
+
+              {/* User Avatar (Desktop) */}
+              <Avatar
+                icon={<UserOutlined />}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  border: '2px solid rgba(255, 255, 255, 0.2)',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                }}
+                className="desktop-only"
+              />
+            </>
+          )}
+
+          {/* Login Button (when not authenticated) */}
+          {!isAuthenticated && (
             <Button
-              type="text"
-              icon={<BellOutlined />}
+              type="default"
+              icon={<LoginOutlined />}
+              onClick={handleLogin}
               style={{
-                color: 'rgba(255, 255, 255, 0.9)',
-                border: 'none',
-                width: 44,
+                borderColor: 'rgba(255, 255, 255, 0.3)',
+                color: 'white',
+                background: 'rgba(255, 255, 255, 0.1)',
                 height: 44,
+                padding: '0 16px',
                 borderRadius: '6px',
+                fontSize: '14px',
+                fontWeight: 500,
+                fontFamily: 'Segoe UI, system-ui, sans-serif',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '16px',
+                gap: 8,
                 transition: 'all 0.2s ease',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                e.currentTarget.style.color = 'white';
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.color = 'rgba(255, 255, 255, 0.9)';
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
               }}
               className="desktop-only"
-            />
-          </Badge>
-
-          {/* User Avatar (Desktop) */}
-          <Avatar
-            icon={<UserOutlined />}
-            style={{
-              background: 'rgba(255, 255, 255, 0.15)',
-              border: '2px solid rgba(255, 255, 255, 0.2)',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-            }}
-            className="desktop-only"
-          />
+            >
+              Login
+            </Button>
+          )}
 
           {/* Mobile Menu Button */}
           <Button
@@ -292,55 +361,82 @@ const Header: React.FC = () => {
             fontFamily: 'Segoe UI, system-ui, sans-serif',
           }}
           items={[
-            {
-              key: 'profile',
-              icon: <UserOutlined />,
-              label: 'Profile',
-              style: { height: 56, display: 'flex', alignItems: 'center' }
-            },
-            {
-              key: 'notifications',
-              icon: <Badge count={3} size="small"><BellOutlined /></Badge>,
-              label: 'Notifications',
-              style: { height: 56, display: 'flex', alignItems: 'center' }
-            },
-            { type: 'divider' },
+            // Authenticated user features
+            ...(isAuthenticated ? [
+              {
+                key: 'profile',
+                icon: <UserOutlined />,
+                label: 'Profile',
+                style: { height: 56, display: 'flex', alignItems: 'center' }
+              },
+              {
+                key: 'notifications',
+                icon: <Badge count={3} size="small"><BellOutlined /></Badge>,
+                label: 'Notifications',
+                style: { height: 56, display: 'flex', alignItems: 'center' }
+              },
+              { type: 'divider' }
+            ] : []),
+            
+            // Navigation items
             ...navItems.map(item => ({
               key: item.key,
               icon: item.icon,
               label: item.label,
               style: { height: 56, display: 'flex', alignItems: 'center' }
             })),
+            
             { type: 'divider' },
-            {
-              key: 'settings',
-              icon: <SettingOutlined />,
-              label: 'Settings',
-              style: { height: 56, display: 'flex', alignItems: 'center' }
-            },
+            
+            // Auth-dependent menu items
+            ...(isAuthenticated ? [
+              {
+                key: 'settings',
+                icon: <SettingOutlined />,
+                label: 'Settings',
+                style: { height: 56, display: 'flex', alignItems: 'center' }
+              },
+              {
+                key: 'logout',
+                icon: <LogoutOutlined />,
+                label: 'Logout',
+                style: { height: 56, display: 'flex', alignItems: 'center', color: '#ff4d4f' },
+                onClick: handleLogout
+              },
+            ] : [
+              {
+                key: 'login',
+                icon: <LoginOutlined />,
+                label: 'Login',
+                style: { height: 56, display: 'flex', alignItems: 'center', color: '#0078d4' },
+                onClick: handleLogin
+              },
+            ]),
           ]}
         />
         
-        {/* User Info at Bottom */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            padding: '24px',
-            borderTop: '1px solid #f0f0f0',
-            background: '#fafafa',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <Avatar icon={<UserOutlined />} />
-            <div>
-              <Text strong style={{ display: 'block', fontSize: '14px' }}>John Doe</Text>
-              <Text type="secondary" style={{ fontSize: '12px' }}>john.doe@company.com</Text>
+        {/* User Info at Bottom (only when authenticated) */}
+        {isAuthenticated && user && (
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              padding: '24px',
+              borderTop: '1px solid #f0f0f0',
+              background: '#fafafa',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <Avatar icon={<UserOutlined />} />
+              <div>
+                <Text strong style={{ display: 'block', fontSize: '14px' }}>{user?.name}</Text>
+                <Text type="secondary" style={{ fontSize: '12px' }}>{user?.email}</Text>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </Drawer>
 
       <style>
