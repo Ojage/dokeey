@@ -14,6 +14,8 @@ import {
   LoginOutlined,
   LogoutOutlined
 } from '@ant-design/icons';
+import { useSelector, useDispatch } from 'react-redux';
+import { AuthState } from '../store';
 // import { login, logout, store } from '../store';
 
 const { Header: AntHeader } = Layout;
@@ -22,8 +24,8 @@ const { Title, Text } = Typography;
 
 const Header = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
-  // const { isAuthenticated, user } = useSelector(state => state);
-  // const dispatch = useDispatch();
+    const { isAuthenticated, user } = useSelector((state: AuthState) => state);
+  const dispatch = useDispatch();
 
   const showDrawer = () => {
     setDrawerVisible(true);
@@ -42,8 +44,8 @@ const Header = () => {
     // }));
   };
 
-  const isAuthenticated = false; // Replace with actual auth state from Redux
-  const user = {email: "joh@gmail.com", name: "Johaness ben"}; // Replace with actual user data from Redux
+  // const isAuthenticated = false; // Replace with actual auth state from Redux
+  // const user = {email: "joh@gmail.com", name: "Johaness ben"}; // Replace with actual user data from Redux
   const handleLogout = () => {
     // dispatch(logout());
     setDrawerVisible(false);
